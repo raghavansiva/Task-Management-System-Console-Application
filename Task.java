@@ -2,72 +2,120 @@ package taskManagement;
 
 import java.util.*;
 
-public class Main {
-	public static void main(String[] args) {
+public class Task {
+	private int id;
+	private String taskName;
+	private String description;
+	private String dueDate;
+	private String status;
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getTaskName() {
+		return taskName;
+	}
+
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getDueDate() {
+		return dueDate;
+	}
+
+	public void setDueDate(String dueDate) {
+		this.dueDate = dueDate;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Task(int id, String taskName, String description, String dueDate, String status) {
+		this.id = id;
+		this.taskName = taskName;
+		this.description = description;
+		this.dueDate = dueDate;
+		this.status = status;
+	}
+	
+	public Task() {
+		super();
+	}
+
+	public void viewAllTask(List<Task> taskList) {
+		if(taskList.size() == 0 ) {
+			System.out.println("no task currently available");
+		}
+		for(Task t : taskList) {
+			System.out.println("ID : "+t.id+"\nTASK : "+t.taskName+"\nDESCRIPTION : "+t.description+"\nDUE DATE : "+t.dueDate+"\nSTATUS : "+t.status);
+		}
+	}
+	
+	public boolean deleteTask(List<Task> taskList, int id) {
+		for(Task t : taskList) {
+			if(t.getId() == id) {
+				taskList.remove(t);
+				return true;
+			}
+		}
+		return false;
+	}
+	public void updateTask(List<Task> taskList, int id, int field) {
 		Scanner sc = new Scanner(System.in);
-		List<Task> taskList = new ArrayList<>();
-		boolean loopStatus = true;
-		System.out.println("TASK MANAGEMENT");
-		int id = 1;
-		String status = "PENDING...";
-		while(loopStatus) {
-			System.out.println("---------------------");
-			System.out.println("1.ADD TASK\n2.UPDATE TASK\n3.DELETE TASK\n4.VIEW ALL TASK");
-			System.out.println("---------------------");
-			int choice = sc.nextInt();
-			sc.nextLine();
-			System.out.println("---------------------");
-			switch(choice) {
-				case 1:
-					System.out.print("TASK : ");
-					String taskName = sc.nextLine();
-					System.out.print("DESCRIPTION : ");
-					String description = sc.nextLine();
-					System.out.print("DUEDATE : ");
+		for(Task t : taskList) {
+			if(t.getId() == id) {
+				if(field == 1) {
+					String old = t.getTaskName();
+					System.out.print("Name : ");
+					String name = sc.nextLine();
+					t.setTaskName(name);
+					System.out.println("Successfully updated name\nForm : "+old+"\nTo : "+t.getTaskName());
+				} else if (field == 2) {
+					String old = t.getDescription();
+					System.out.print("Description : ");
+					String des = sc.nextLine();
+					t.setDescription(des);
+					System.out.println("Successfully updated name\nForm : "+old+"\nTo : "+t.getDescription());
+				} else if (field == 3) {
+					String old = t.getDueDate();
+					System.out.print("DueDate : ");
 					String dueDate = sc.nextLine();
-					taskList.add(new Task(id++, taskName, description, dueDate, status));
-					break;
-				case 2:
-					if(taskList.size() == 0 ) {
-						System.out.println("no task currently available");
+					t.setDueDate(dueDate);
+					System.out.println("Successfully updated name\nForm : "+old+"\nTo : "+t.getDueDate());
+				} else {
+					String old = t.getStatus();
+					System.out.println("1.Pending\n2.Partially Completed\n3.Completed");
+					int opt = sc.nextInt(); 
+					sc.nextLine(); 
+					String status;
+					if(opt == 1) {
+						t.setStatus("Pending...");
+					} else if (opt == 2) {
+						t.setStatus("Partially Completed...");
 					} else {
-						System.out.print("Enter task ID to UPDATE : ");
-						int taskID = sc.nextInt();
-						sc.nextLine();
-						System.out.println("Select field to UPDATE\n1.NAME\n2.DESCRIPTION\n3.DUE DATE\n4.STATUS");
-						int opt = sc.nextInt();
-						sc.nextLine();
-						Task t = new Task();
-						if(taskID < id && taskID > 0 && opt > 0 && opt < 5) {
-							t.updateTask(taskList, taskID, opt);
-						} else {
-							System.out.print("Invalid option...Exiting...");
-						}
+						t.setStatus("Completed !!!");
 					}
-					break;
-				case 3:
-					if(taskList.size() == 0 ) {
-						System.out.println("no task currently available");
-					} else {
-						System.out.print("Enter task ID to delete : ");
-						int taskID1 = sc.nextInt();
-						sc.nextLine();
-						Task tM = new Task();
-						boolean operation = tM.deleteTask(taskList, taskID1);
-						if(operation) {
-							System.out.println("DELETED SUCCESSFULLY");
-						} else {
-							System.out.println("Entered Task Id doesn't exist");
-						}
-					}
-					break;
-				case 4:
-					Task t1 = new Task();
-					t1.viewAllTask(taskList);
-					break;
-				default:
-					System.out.print("Invalid option");
-					break;
+					System.out.println("Successfully updated name\nForm : "+old+"\nTo : "+t.getStatus());
+				}
 			}
 		}
 	}
